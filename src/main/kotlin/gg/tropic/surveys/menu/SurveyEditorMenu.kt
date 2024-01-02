@@ -40,7 +40,50 @@ class SurveyEditorMenu(private val survey: Survey) : Menu("Editing Survey...")
 
                             SurveyEditorMenu(survey).openMenu(player)
                         }.start(player)
-                }
+                },
+
+            1 to ItemBuilder.of(Material.PAPER)
+                .name("${CC.B_YELLOW}Edit Survey Questions")
+                .addToLore(
+                    "${CC.GRAY}Change the questions that users",
+                    "${CC.GRAY}will have to answer on the survey.",
+                    "",
+                    "${CC.GREEN}Click to change!"
+                ).toButton { _, _ ->
+
+                },
+
+            2 to ItemBuilder.of(Material.PAPER)
+                .name("${CC.B_AQUA}Edit Survey Rewards")
+                .addToLore(
+                    "${CC.GRAY}Change the rewards that users",
+                    "${CC.GRAY}will receive when they complete",
+                    "${CC.GRAY}the survey.",
+                    "",
+                    "${CC.GREEN}Click to change!"
+                ).toButton { _, _ ->
+
+                },
+
+            8 to ItemBuilder.of(Material.REDSTONE_BLOCK)
+                .name("${CC.B_RED}Delete Survey")
+                .addToLore(
+                    "${CC.GRAY}Deletes the survey and removes",
+                    "${CC.GRAY}it from the active selections",
+                    "",
+                    "${CC.RED}Click to delete!"
+                ).toButton { _, _ ->
+                    with (SurveyService.cached()) {
+                        this.surveys.remove(survey.identifier)
+                        SurveyService.sync(this)
+                    }
+
+                    player.sendMessage(
+                        "${CC.GREEN}You have just deleted the ${Color.translate(survey.displayName)} ${CC.GREEN}survey!"
+                    )
+
+                    SurveyAdminMenu().openMenu(player)
+                },
         )
     }
 }

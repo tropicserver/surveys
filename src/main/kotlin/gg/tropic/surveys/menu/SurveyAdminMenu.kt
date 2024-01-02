@@ -14,13 +14,13 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import java.util.*
 
-class SurveyAdminMenu(private val surveys: List<Survey>) : PaginatedMenu()
+class SurveyAdminMenu : PaginatedMenu()
 {
     override fun getAllPagesButtons(player: Player): Map<Int, Button>
     {
         val buttons = mutableMapOf<Int, Button>()
 
-        surveys.forEach {
+        SurveyService.cached().surveys.map { it.value }.forEach {
             buttons[buttons.size] = ItemBuilder.of(Material.PAPER)
                 .name(Color.translate(it.displayName))
                 .addToLore(
@@ -89,7 +89,7 @@ class SurveyAdminMenu(private val surveys: List<Survey>) : PaginatedMenu()
                                 "${CC.GREEN}You have just created a new survey with the name ${Color.translate(input)}${CC.GREEN}."
                             )
 
-                            SurveyAdminMenu(SurveyService.cached().surveys.map { it.value }).openMenu(player)
+                            SurveyAdminMenu().openMenu(player)
                         }.start(player)
                 },
         )

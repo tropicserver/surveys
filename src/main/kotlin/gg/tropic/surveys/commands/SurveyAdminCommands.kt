@@ -23,5 +23,5 @@ object SurveyAdminCommands : ScalaCommand()
     @Subcommand("adminpanel")
     @Description("Opens the survey admin panel")
     fun onAdminPanel(player: ScalaPlayer) =
-        SurveyAdminMenu(SurveyService.cached().surveys.map { it.value }).openMenu(player.bukkit())
+        SurveyAdminMenu().openMenu(player.bukkit())
 }
