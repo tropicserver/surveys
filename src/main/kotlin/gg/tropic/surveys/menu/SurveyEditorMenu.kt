@@ -53,7 +53,7 @@ class SurveyEditorMenu(private val survey: Survey) : Menu("Editing Survey...")
 
                 },
 
-            2 to ItemBuilder.of(Material.PAPER)
+            2 to ItemBuilder.of(Material.APPLE)
                 .name("${CC.B_AQUA}Edit Survey Rewards")
                 .addToLore(
                     "${CC.GRAY}Change the rewards that users",
