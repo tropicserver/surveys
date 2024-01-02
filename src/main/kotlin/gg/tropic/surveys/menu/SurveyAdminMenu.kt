@@ -16,6 +16,11 @@ import java.util.*
 
 class SurveyAdminMenu : PaginatedMenu()
 {
+    init
+    {
+        updateAfterClick = true
+    }
+
     override fun getAllPagesButtons(player: Player): Map<Int, Button>
     {
         val buttons = mutableMapOf<Int, Button>()
@@ -29,7 +34,7 @@ class SurveyAdminMenu : PaginatedMenu()
                     "${CC.GRAY}Expires: &c${CC.WHITE}${
                         if (it.expiration == null) "Never" else "In ${
                             TimeUtil.formatIntoDateString(
-                                Date(it.expiration - System.currentTimeMillis())
+                                Date(it.expiration!! - System.currentTimeMillis())
                             )
                         }"
                     }",
@@ -45,11 +50,16 @@ class SurveyAdminMenu : PaginatedMenu()
                             SurveyEditorMenu(it).openMenu(player)
                         } else
                         {
-
+                            //todo
                         }
                     } else
                     {
-                        //todo
+                        with (SurveyService.cached()) {
+                            this.surveys.remove(it.identifier)
+                            SurveyService.sync(this)
+                        }
+
+                        player.sendMessage("${CC.GREEN}You have just deleted the ${it.displayName} ${CC.GREEN}survey!")
                     }
                 }
         }

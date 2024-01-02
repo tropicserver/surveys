@@ -13,5 +13,5 @@ data class Survey(
     val questions = mutableListOf<Question>()
     val rewards = mutableListOf<SurveyReward>()
 
-    val expiration: Long? = null
+    var expiration: Long? = null
 }

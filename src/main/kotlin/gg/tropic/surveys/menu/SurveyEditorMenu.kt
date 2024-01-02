@@ -1,5 +1,6 @@
 package gg.tropic.surveys.menu
 
+import gg.tropic.surveys.menu.sub.SurveyEditQuestionsMenu
 import gg.tropic.surveys.survey.Survey
 import gg.tropic.surveys.survey.SurveyService
 import net.evilblock.cubed.menu.Button
@@ -8,6 +9,7 @@ import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.Color
 import net.evilblock.cubed.util.bukkit.ItemBuilder
 import net.evilblock.cubed.util.bukkit.prompt.InputPrompt
+import net.evilblock.cubed.util.time.TimeUtil
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
@@ -29,7 +31,7 @@ class SurveyEditorMenu(private val survey: Survey) : Menu("Editing Survey...")
                         .acceptInput { _, input ->
                             survey.displayName = input
 
-                            with (SurveyService.cached()) {
+                            with(SurveyService.cached()) {
                                 this.surveys[survey.identifier] = survey
                                 SurveyService.sync(this)
                             }
@@ -50,7 +52,7 @@ class SurveyEditorMenu(private val survey: Survey) : Menu("Editing Survey...")
                     "",
                     "${CC.GREEN}Click to change!"
                 ).toButton { _, _ ->
-
+                    SurveyEditQuestionsMenu(survey).openMenu(player)
                 },
 
             2 to ItemBuilder.of(Material.APPLE)
@@ -65,24 +67,35 @@ class SurveyEditorMenu(private val survey: Survey) : Menu("Editing Survey...")
 
                 },
 
-            8 to ItemBuilder.of(Material.REDSTONE_BLOCK)
-                .name("${CC.B_RED}Delete Survey")
+            3 to ItemBuilder.of(Material.SIGN)
+                .name("${CC.B_GOLD}Change Survey Expiry")
                 .addToLore(
-                    "${CC.GRAY}Deletes the survey and removes",
-                    "${CC.GRAY}it from the active selections",
+                    "${CC.GRAY}Change the time period that users",
+                    "${CC.GRAY}will be allowed to take the survey.",
                     "",
-                    "${CC.RED}Click to delete!"
+                    "${CC.GREEN}Click to change!"
                 ).toButton { _, _ ->
-                    with (SurveyService.cached()) {
-                        this.surveys.remove(survey.identifier)
-                        SurveyService.sync(this)
-                    }
+                    InputPrompt()
+                        .withText("${CC.GREEN}Enter how long you want this survey to stay available for:")
+                        .acceptInput { _, input ->
+                            val parsed = TimeUtil.parseTime(input)
 
-                    player.sendMessage(
-                        "${CC.GREEN}You have just deleted the ${Color.translate(survey.displayName)} ${CC.GREEN}survey!"
-                    )
+                            if (parsed != Long.MAX_VALUE.toInt())
+                            {
+                                survey.expiration = parsed * 1000L
+                            }
 
-                    SurveyAdminMenu().openMenu(player)
+                            with(SurveyService.cached()) {
+                                this.surveys[survey.identifier] = survey
+                                SurveyService.sync(this)
+                            }
+
+                            player.sendMessage(
+                                "${CC.GREEN}You have changed the expiry of this survey to ${CC.YELLOW}${TimeUtil.formatIntoDetailedString(parsed)} ${CC.GREEN}from this time."
+                            )
+
+                            SurveyEditorMenu(survey).openMenu(player)
+                        }.start(player)
                 },
         )
     }
