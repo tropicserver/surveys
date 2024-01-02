@@ -7,7 +7,7 @@ import java.util.UUID
 
 data class Survey(
     override val identifier: UUID = UUID.randomUUID(),
-    val displayName: String
+    var displayName: String
 ) : IDataStoreObject
 {
     val questions = mutableListOf<Question>()

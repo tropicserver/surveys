@@ -35,11 +35,18 @@ class SurveyAdminMenu(private val surveys: List<Survey>) : PaginatedMenu()
                     }",
                     "",
                     "${CC.GREEN}Left-Click to edit this survey",
+                    "${CC.YELLOW}Shift-Left-Click to view metrics",
                     "${CC.RED}Right-Click to delete this survey"
                 ).toButton { _, clickType ->
                     if (clickType!!.isLeftClick)
                     {
-                        //todo
+                        if (!clickType.isShiftClick)
+                        {
+                            SurveyEditorMenu(it).openMenu(player)
+                        } else
+                        {
+
+                        }
                     } else
                     {
                         //todo
@@ -73,8 +80,10 @@ class SurveyAdminMenu(private val surveys: List<Survey>) : PaginatedMenu()
                         .acceptInput { _, input ->
                             val survey = Survey(displayName = input)
 
-                            SurveyService.cached().surveys[survey.identifier] = survey
-                            SurveyService.sync()
+                            with (SurveyService.cached()) {
+                                this.surveys[survey.identifier] = survey
+                                SurveyService.sync(this)
+                            }
 
                             player.sendMessage(
                                 "${CC.GREEN}You have just created a new survey with the name ${Color.translate(input)}${CC.GREEN}."
