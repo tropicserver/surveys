@@ -56,6 +56,21 @@ class SurveyEditAnswersMenu(private val survey: Survey, private val question: Qu
 
                                 SurveyEditAnswersMenu(survey, question).openMenu(player)
                             }.start(player)
+                    } else
+                    {
+                        question.answers.remove(it.key)
+                        survey.questions[question.id] = question
+
+                        with (SurveyService.cached()) {
+                            this.surveys[survey.identifier] = survey
+                            SurveyService.sync(this)
+                        }
+
+                        player.sendMessage(
+                            "${CC.GREEN}You have just deleted the question answer ${CC.YELLOW}${it.key}${CC.GREEN}."
+                        )
+
+                        SurveyEditAnswersMenu(survey, question).openMenu(player)
                     }
                 }
         }
