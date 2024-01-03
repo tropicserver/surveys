@@ -10,7 +10,7 @@ data class Survey(
     var displayName: String
 ) : IDataStoreObject
 {
-    val questions = mutableListOf<Question>()
+    val questions = mutableMapOf<String, Question>()
     val rewards = mutableListOf<SurveyReward>()
 
     var expiration: Long? = null

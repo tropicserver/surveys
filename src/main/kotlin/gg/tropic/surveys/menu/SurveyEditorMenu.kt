@@ -5,6 +5,7 @@ import gg.tropic.surveys.survey.Survey
 import gg.tropic.surveys.survey.SurveyService
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
+import net.evilblock.cubed.menu.buttons.BackButton
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.Color
 import net.evilblock.cubed.util.bukkit.ItemBuilder
@@ -97,6 +98,8 @@ class SurveyEditorMenu(private val survey: Survey) : Menu("Editing Survey...")
                             SurveyEditorMenu(survey).openMenu(player)
                         }.start(player)
                 },
+
+            8 to BackButton("All Surveys") { _ -> SurveyAdminMenu().openMenu(player) },
         )
     }
 }
