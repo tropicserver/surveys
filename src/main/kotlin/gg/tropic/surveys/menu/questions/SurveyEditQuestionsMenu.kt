@@ -1,6 +1,5 @@
-package gg.tropic.surveys.menu.sub
+package gg.tropic.surveys.menu.questions
 
-import gg.tropic.surveys.menu.SurveyAdminMenu
 import gg.tropic.surveys.menu.SurveyEditorMenu
 import gg.tropic.surveys.survey.Survey
 import gg.tropic.surveys.survey.SurveyService
@@ -23,7 +22,7 @@ class SurveyEditQuestionsMenu(private val survey: Survey) : PaginatedMenu()
 
         survey.questions.forEach {
             buttons[buttons.size] = ItemBuilder.of(Material.PAPER)
-                .name("${CC.WHITE}${it.value.id}")
+                .name("${CC.WHITE}${it.key}")
                 .addToLore(
                     "${CC.GRAY}Question: ${CC.WHITE}${it.value.question}",
                     "${CC.GRAY}Maximum Answers: ${CC.WHITE}${it.value.answers.size}",
@@ -118,7 +117,7 @@ class SurveyEditQuestionsMenu(private val survey: Survey) : PaginatedMenu()
                             }
 
                             player.sendMessage(
-                                "${CC.GREEN}You have just created a new survey question with the id $input${CC.GREEN}."
+                                "${CC.GREEN}You have just created a new survey question with the id ${CC.YELLOW}$input${CC.GREEN}."
                             )
 
                             SurveyEditQuestionsMenu(survey).openMenu(player)

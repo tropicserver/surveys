@@ -1,6 +1,6 @@
 package gg.tropic.surveys.menu
 
-import gg.tropic.surveys.menu.sub.SurveyEditQuestionsMenu
+import gg.tropic.surveys.menu.questions.SurveyEditQuestionsMenu
 import gg.tropic.surveys.survey.Survey
 import gg.tropic.surveys.survey.SurveyService
 import net.evilblock.cubed.menu.Button
