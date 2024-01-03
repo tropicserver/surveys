@@ -14,4 +14,6 @@ data class ActiveSurveySession(
     fun isComplete() = completed.size == taking.questions.size
 
     fun getAllQuestionResponses() = taking.questions.values.elementAtOrNull(questionIndex)?.answers
+
+    fun getCurrentQuestion() = taking.questions.values.elementAt(questionIndex)
 }

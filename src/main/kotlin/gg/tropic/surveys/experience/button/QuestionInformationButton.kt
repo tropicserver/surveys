@@ -1,43 +1,39 @@
 package gg.tropic.surveys.experience.button
 
 import com.cryptomorin.xseries.XMaterial
+import gg.tropic.surveys.survey.questions.Question
+import gg.tropic.surveys.survey.questions.QuestionResponse
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.Color
 import net.evilblock.cubed.util.bukkit.Constants
 import net.evilblock.cubed.util.bukkit.ItemUtils
-import net.evilblock.cubed.util.nms.MinecraftReflection
-import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.InventoryView
 import org.bukkit.inventory.ItemStack
 
-class NextQuestionButton(
-    private val displayName: String,
-    private val current: Int,
-    private val total: Int,
-    private val left: Boolean,
-    private val callback: (Player) -> Unit,
-) : Button()
+class QuestionInformationButton(
+    private val question: Question,
+    private val response: QuestionResponse?
+)  : Button()
 {
 
     override fun clicked(player: Player, slot: Int, clickType: ClickType, view: InventoryView)
     {
-        callback.invoke(player)
     }
 
     override fun getName(player: Player): String
     {
-        return Color.translate(displayName)
+        return "${CC.B_GREEN}Question Information"
     }
 
     override fun getDescription(player: Player): List<String>
     {
         return listOf(
             "",
-            "${CC.GRAY}Click to switch questions",
-            "${CC.GRAY}Currently on question: ${CC.WHITE}$current/$total"
+            "${CC.GRAY}Question: ${CC.WHITE}${question.question}?",
+            "${CC.GRAY}Your Answer: ${CC.WHITE}${response?.responseValue ?: "None"}"
         )
     }
 
@@ -53,15 +49,10 @@ class NextQuestionButton(
 
     override fun getButtonItem(player: Player): ItemStack
     {
-        val texture = if (!left)
-        {
-            Constants.WOOD_ARROW_RIGHT_TEXTURE
-        } else
-        {
-            Constants.WOOD_ARROW_LEFT_TEXTURE
-        }
 
-
-        return ItemUtils.applySkullTexture(super.getButtonItem(player), texture)
+        return ItemUtils.applySkullTexture(
+            super.getButtonItem(player),
+            "eyJ0aW1lc3RhbXAiOjE1ODc4MjU0NzgwNDcsInByb2ZpbGVJZCI6ImUzYjQ0NWM4NDdmNTQ4ZmI4YzhmYTNmMWY3ZWZiYThlIiwicHJvZmlsZU5hbWUiOiJNaW5pRGlnZ2VyVGVzdCIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2E1ODg4YWEyZDdlMTk5MTczYmEzN2NhNzVjNjhkZTdkN2Y4NjJiMzRhMTNiZTMyNDViZTQ0N2UyZjIyYjI3ZSJ9fX0="
+        )
     }
 }
