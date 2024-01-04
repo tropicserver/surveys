@@ -1,5 +1,6 @@
 package gg.tropic.surveys.experience
 
+import gg.tropic.surveys.experience.button.CompleteButton
 import gg.tropic.surveys.experience.button.NextQuestionButton
 import gg.tropic.surveys.experience.button.QuestionInformationButton
 import net.evilblock.cubed.menu.Button
@@ -44,7 +45,7 @@ class SurveyProcessingMenu(private val session: ActiveSurveySession) : Paginated
 
     override fun getGlobalButtons(player: Player): Map<Int, Button>
     {
-        return mutableMapOf(
+        val buttons = mutableMapOf(
             2 to NextQuestionButton(
                 "&ePrevious Question",
                 session.questionIndex + 1,
@@ -84,6 +85,21 @@ class SurveyProcessingMenu(private val session: ActiveSurveySession) : Paginated
                 }
             }
         )
+
+        if (session.isComplete())
+        {
+            buttons[8] = CompleteButton("&a&lComplete Survey") { _ ->
+                if (!session.isComplete())
+                {
+                    player.sendMessage("${CC.RED}You still have unanswered questions!")
+                } else
+                {
+                    player.sendMessage("${CC.GREEN}You have completed the survey!")
+                }
+            }
+        }
+
+        return buttons
     }
 
     override fun getPrePaginatedTitle(player: Player): String

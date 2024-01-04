@@ -4,20 +4,15 @@ import com.cryptomorin.xseries.XMaterial
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.Color
-import net.evilblock.cubed.util.bukkit.Constants
 import net.evilblock.cubed.util.bukkit.ItemUtils
-import net.evilblock.cubed.util.nms.MinecraftReflection
-import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.InventoryView
 import org.bukkit.inventory.ItemStack
 
-class NextQuestionButton(
+
+class CompleteButton(
     private val displayName: String,
-    private val current: Int,
-    private val total: Int,
-    private val left: Boolean,
     private val callback: (Player) -> Unit,
 ) : Button()
 {
@@ -36,8 +31,7 @@ class NextQuestionButton(
     {
         return listOf(
             "",
-            "${CC.GRAY}Click to switch questions",
-            "${CC.GRAY}Currently on question: ${CC.WHITE}$current/$total"
+            "${CC.GRAY}Click to complete the survey!"
         )
     }
 
@@ -53,14 +47,9 @@ class NextQuestionButton(
 
     override fun getButtonItem(player: Player): ItemStack
     {
-        val texture = if (!left)
-        {
-            Constants.WOOD_ARROW_RIGHT_TEXTURE
-        } else
-        {
-            Constants.WOOD_ARROW_LEFT_TEXTURE
-        }
-
-        return ItemUtils.applySkullTexture(super.getButtonItem(player), texture)
+        return ItemUtils.applySkullTexture(
+            super.getButtonItem(player),
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTkyZTMxZmZiNTljOTBhYjA4ZmM5ZGMxZmUyNjgwMjAzNWEzYTQ3YzQyZmVlNjM0MjNiY2RiNDI2MmVjYjliNiJ9fX0="
+        )
     }
 }
